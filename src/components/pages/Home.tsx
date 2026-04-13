@@ -1,0 +1,63 @@
+import { Box, VStack, SimpleGrid, Text } from "@chakra-ui/react"
+import { FaArrowDownLong, FaArrowUpLong } from "react-icons/fa6";
+import { VscGraph } from "react-icons/vsc"
+import { BalanceCard } from "../layouts/BalanceCard";
+import { MenuCard } from "../home/MenuCard";
+import { CardList } from "../layouts/CardList";
+import { MdOutlineEdit } from "react-icons/md";
+import { HomeBalanceCard } from "../home/HomeBalanceCard";
+import { useThemeColor } from "../ui/theme-context";
+import { useNavigate } from "react-router-dom";
+
+const Home: React.FC = () => {
+
+  const handleMenuClick = (menu: string) => {
+    alert(`Klik menu: ${menu}`)
+  }
+
+  const { theme } = useThemeColor();
+  const navigate = useNavigate();
+
+  return (
+    <Box
+      h="100vh"
+      maxW="375px"
+      mx="auto"
+      p={4}
+      pb={24}
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      bg={"gray.50"}
+    >
+      <VStack w="full" align="start" p={1} gap={0} mb={2}>
+        <Text textStyle="sm" color={"black"}>
+          Selamat Datang 👋
+        </Text>
+        <Text textStyle="lg" fontWeight="semibold"  color={"black"}>
+          Nama Anda
+        </Text>
+      </VStack>
+      <Box w="full" mb={8}>
+        <BalanceCard
+          title="Total Saldo"
+          bg={theme.primary}
+          color="white"
+        >
+          <HomeBalanceCard bg={theme.secondary} color="white" />
+        </BalanceCard>
+      </Box>
+
+      <SimpleGrid columns={4} gap={4} mb={8}>
+        <MenuCard title="Pemasukan" icon={FaArrowUpLong} bg="green.200" color="green.800" onClick={() => navigate('/pemasukan/form')} />
+        <MenuCard title="Pengeluaran" icon={FaArrowDownLong} bg="red.200" color="red.800" onClick={() => navigate('/pengeluaran/form')} />
+        <MenuCard title="Withlist" icon={MdOutlineEdit} bg="blue.200" color="blue.800" onClick={() => handleMenuClick("Withlist")} />
+        <MenuCard title="Laporan" icon={VscGraph} bg="orange.200" color="orange.800" onClick={() => navigate('/laporan')} />
+      </SimpleGrid>
+
+      <CardList title="Transaksi Hari Ini" color={theme.text}/>
+    </Box>
+  )
+}
+
+export default Home;
