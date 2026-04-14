@@ -1,7 +1,7 @@
 import { Box, HStack, Text, Button, VStack } from "@chakra-ui/react"
-import { BalanceCard } from "../layouts/BalanceCard";
-import { CardList } from "../layouts/CardList";
-import { useThemeColor } from "../ui/theme-context";
+import { BalanceCard } from "../../components/card/BalanceCard";
+import { CardList } from "../../components/list/CardList";
+import { useThemeColor } from "../../components/ui/theme-context";
 import { useNavigate } from "react-router-dom";
 
 type PageType = "income" | "expense";

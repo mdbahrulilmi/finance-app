@@ -1,12 +1,12 @@
 import { Box, VStack, SimpleGrid, Text } from "@chakra-ui/react"
 import { FaArrowDownLong, FaArrowUpLong } from "react-icons/fa6";
 import { VscGraph } from "react-icons/vsc"
-import { BalanceCard } from "../layouts/BalanceCard";
-import { MenuCard } from "../home/MenuCard";
-import { CardList } from "../layouts/CardList";
+import { BalanceCard } from "../../components/card/BalanceCard";
+import { MenuCard } from "./components/MenuCard";
+import { CardList } from "../../components/list/CardList";
 import { MdOutlineEdit } from "react-icons/md";
-import { HomeBalanceCard } from "../home/HomeBalanceCard";
-import { useThemeColor } from "../ui/theme-context";
+import { HomeBalanceCard } from "./components/HomeBalanceCard";
+import { useThemeColor } from "../../components/ui/theme-context";
 import { useNavigate } from "react-router-dom";
 
 const Home: React.FC = () => {
@@ -29,6 +29,11 @@ const Home: React.FC = () => {
       flexDirection="column"
       alignItems="center"
       bg={"gray.50"}
+      overflowY="auto"
+      css={{
+        "&::-webkit-scrollbar": { display: "none" },
+        scrollbarWidth: "none"
+      }}
     >
       <VStack w="full" align="start" p={1} gap={0} mb={2}>
         <Text textStyle="sm" color={"black"}>
@@ -51,7 +56,7 @@ const Home: React.FC = () => {
       <SimpleGrid columns={4} gap={4} mb={8}>
         <MenuCard title="Pemasukan" icon={FaArrowUpLong} bg="green.200" color="green.800" onClick={() => navigate('/pemasukan/form')} />
         <MenuCard title="Pengeluaran" icon={FaArrowDownLong} bg="red.200" color="red.800" onClick={() => navigate('/pengeluaran/form')} />
-        <MenuCard title="Withlist" icon={MdOutlineEdit} bg="blue.200" color="blue.800" onClick={() => handleMenuClick("Withlist")} />
+        <MenuCard title="Wishlist" icon={MdOutlineEdit} bg="blue.200" color="blue.800" onClick={() => handleMenuClick("Wishlist")} />
         <MenuCard title="Laporan" icon={VscGraph} bg="orange.200" color="orange.800" onClick={() => navigate('/laporan')} />
       </SimpleGrid>
 

@@ -6,10 +6,10 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { CardList } from "../layouts/CardList";
-import { GraphLine } from "../layouts/GraphLine";
-import { GraphPie } from "../layouts/GraphPie";
-import { useThemeColor } from "../ui/theme-context";
+import { CardList } from "../../components/list/CardList";
+import { GraphLine } from "../../components/chart/GraphLine";
+import { GraphPie } from "../../components/chart/GraphPie";
+import { useThemeColor } from "../../components/ui/theme-context";
 
 const Report: React.FC = () => {
 

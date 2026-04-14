@@ -1,5 +1,5 @@
 import { Box, HStack, Text } from "@chakra-ui/react"
-import { RupiahFormater } from "../utils/RupiahFormater";
+import { RupiahFormater } from "../../../components/utils/RupiahFormater";
 
 interface HomeBalanceCardProps {
   bg: string

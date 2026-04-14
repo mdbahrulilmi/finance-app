@@ -13,13 +13,13 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { Select } from "@chakra-ui/react";
-import { getToday } from "../utils/get-today";
+import { getToday } from "../../../components/utils/get-today";
 import { BiArrowBack } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 
 type TransactionFormData = {
   date: string;
-  amount: number;
+  amount: string;
   source: string;
   category: string;
   notes: string;
@@ -38,7 +38,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type }) => {
     
   const [formData, setFormData] = useState<TransactionFormData>({
     date: getToday(),
-    amount: 0,
+    amount: "",
     source: "",
     category: "",
     notes: "",
@@ -47,25 +47,37 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type }) => {
   const isIncome = type === "income";
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+      const { name, value } = e.target;
 
-    setFormData({
-      ...formData,
-      [name]: name === "amount" ? Number(value) : value,
-    });
-  };
+      if (name === "amount") {
+        // hanya angka (hapus semua huruf)
+        const onlyNumbers = value.replace(/[^0-9]/g, "");
+
+        setFormData({
+          ...formData,
+          amount: onlyNumbers,
+        });
+
+        return;
+      }
+
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     const payload = {
       ...formData,
+      amount: Number(formData.amount),
       type,
     };
 
-    console.log("Data:", payload);
   };
 
   const categoryCollection = createListCollection({
@@ -109,10 +121,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type }) => {
           <Field.Root required>
             <Field.Label>Jumlah (Rp)</Field.Label>
             <Input
-              type="number"
+              type="text"
               name="amount"
               value={formData.amount}
               onChange={handleChange}
+              inputMode="numeric"
+              placeholder="0"
             />
           </Field.Root>
 
@@ -144,7 +158,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type }) => {
                     <Select.ValueText placeholder="Pilih kategori" />
                 </Select.Trigger>
 
-                {/* 🔥 WAJIB pakai Portal */}
                 <Portal>
                     <Select.Positioner>
                     <Select.Content>

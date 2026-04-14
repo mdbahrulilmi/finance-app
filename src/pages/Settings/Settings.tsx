@@ -7,12 +7,12 @@ import {
   Icon,
   Avatar,
 } from "@chakra-ui/react";
-import ThemeRow from "../ui/theme-row";
+import ThemeRow from "../../components/ui/theme-row";
 import { GiPayMoney, GiReceiveMoney } from "react-icons/gi";
-import { useThemeColor } from "../ui/theme-context";
+import { useThemeColor } from "../../components/ui/theme-context";
 import { useNavigate } from "react-router-dom";
 
-export const Account = () => {
+export const Settings = () => {
 
   const { theme } = useThemeColor();
   const navigate = useNavigate();
@@ -46,7 +46,7 @@ export const Account = () => {
       <HStack w="full" justifyContent="space-between" alignItems="center" mb={4}>
         <VStack align="start" gap={0}>
           <Text fontSize="lg" fontWeight="bold" color={theme.text}>
-           Account
+           Settings
           </Text>
         </VStack>
       </HStack>
@@ -154,4 +154,4 @@ const MenuItem = ({
 
 
 
-export default Account;
+export default Settings;

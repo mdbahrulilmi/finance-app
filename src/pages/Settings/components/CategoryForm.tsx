@@ -1,6 +1,6 @@
-import { Box, Button, Input, VStack, Field, HStack, Icon, Heading } from "@chakra-ui/react";
+import { Box, Button, Input, Field, HStack, Icon, Heading } from "@chakra-ui/react";
 import { useState } from "react";
-import { useThemeColor } from "../ui/theme-context";
+import { useThemeColor } from "../../../components/ui/theme-context";
 import { BiArrowBack } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 
@@ -10,14 +10,22 @@ export const CategoryForm = () => {
   const [name, setName] = useState("");
 
   const handleSubmit = () => {
-    console.log(name);
     setName("");
   };
 
   return (
-    <Box w="full" maxW="400px" p={6} bg="white" borderRadius="xl">
-        <VStack align="stretch" gap={4}>
-        
+    <Box  
+        w="full"
+        p={4} 
+        bg="white" 
+        maxW="375px"
+        borderRadius="xl"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        mx="auto"
+        h="100vh"
+    >        
         <HStack display={"flex"} w={"full"} align={"center"} mb={1}>
             <Icon as={BiArrowBack} size={"md"} onClick={()=> navigate(-1)} cursor={"pointer"} color={"black"}/>
             <Heading fontSize="lg" fontWeight="bold" color={"black"}  ml={2}>
@@ -35,6 +43,7 @@ export const CategoryForm = () => {
         </Field.Root>
 
         <Button
+            w="full"
             bg={theme.primary}
             color="white"
             _hover={{ opacity: 0.9 }}
@@ -44,8 +53,6 @@ export const CategoryForm = () => {
         >
             Tambah
         </Button>
-
-        </VStack>
     </Box>
   );
 };

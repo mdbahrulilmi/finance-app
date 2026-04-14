@@ -1,5 +1,5 @@
 import { Box, Button, Heading, HStack, Icon, Text, VStack } from "@chakra-ui/react";
-import { useThemeColor } from "../ui/theme-context";
+import { useThemeColor } from "../../../components/ui/theme-context";
 import { BiArrowBack } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 
@@ -18,7 +18,18 @@ export const CategoryList = ({
   const navigate = useNavigate();
 
   return (
-    <Box w="full" p={4} bg="gray.50" h={"100vh"}>
+    <Box 
+      w="full" 
+      p={4} 
+      bg="gray.50" 
+      h={"100vh"}
+      maxW="375px"
+      borderRadius="xl"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      mx="auto"
+      >
       <VStack w="full" align="start" gap={4}>
         
         <HStack display={"flex"} w={"full"} align={"center"} mb={1}>
