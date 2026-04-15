@@ -1,3 +1,4 @@
+import { login, register } from "@/services/auth";
 import {
   Box,
   Button,
@@ -37,10 +38,32 @@ export const AuthForm = ({ type = "login", onSubmit }: AuthFormProps) => {
     });
   };
 
-  const handleSubmit = () => {
-    if (isRegister && form.password !== form.confirmPassword) {
-      alert("Password tidak sama!");
-      return;
+  const handleSubmit = async () => {
+    if (isRegister) {
+      if (form.password !== form.confirmPassword) {
+        console.error("Password tidak sama");
+        return;
+      }
+
+      try {
+        const res = await register(form.email, form.password);
+        if (!res.session) {
+          alert("Cek email untuk verifikasi");
+          return;
+        }
+      } catch (err: any) {
+        console.error(err.message);
+      }
+
+    } else {
+      try {
+        const res = await login(form.email, form.password);
+        if (res.session) {
+          navigate("/");
+        }
+      } catch (err: any) {
+        console.error(err.message);
+      }
     }
 
     onSubmit?.(form);

@@ -11,6 +11,7 @@ import ThemeRow from "../../components/ui/theme-row";
 import { GiPayMoney, GiReceiveMoney } from "react-icons/gi";
 import { useThemeColor } from "../../components/ui/theme-context";
 import { useNavigate } from "react-router-dom";
+import { logout } from "@/services/auth";
 
 export const Settings = () => {
 
@@ -111,6 +112,10 @@ export const Settings = () => {
         <Button
           w="full"
           // leftIcon={<FiLogOut />}
+          onClick={async () => {
+            await logout();
+            navigate("/masuk");
+          }}
           colorScheme="red"
           variant="outline"
           bg="red.500"
