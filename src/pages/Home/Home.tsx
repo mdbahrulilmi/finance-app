@@ -8,6 +8,8 @@ import { MdOutlineEdit } from "react-icons/md";
 import { HomeBalanceCard } from "./components/HomeBalanceCard";
 import { useThemeColor } from "../../components/ui/theme-context";
 import { useNavigate } from "react-router-dom";
+import { useProfile } from "@/services/useProfile";
+import { useTransaction } from "@/services/useTransaction";
 
 const Home: React.FC = () => {
 
@@ -17,6 +19,34 @@ const Home: React.FC = () => {
 
   const { theme } = useThemeColor();
   const navigate = useNavigate();
+  const { data: profile } = useProfile();
+
+  const {data:transactions = []} = useTransaction();
+
+  const incomeTransactions = transactions.filter(
+    (item) => item.type === "income"
+  );
+
+  const expenseTransactions = transactions.filter(
+    (item) => item.type === "expense"
+  );
+
+  const totalIncome = incomeTransactions.reduce(
+    (acc, item) => acc + item.amount,
+    0
+  );
+  
+  const totalExpense = expenseTransactions.reduce(
+    (acc, item) => acc + item.amount,
+    0
+  );
+
+  const total = totalIncome - totalExpense;
+
+  const todayTransactions = transactions.filter((item) => {
+    const today = new Date().toDateString();
+    return new Date(item.transaction_date).toDateString() === today;
+  });
 
   return (
     <Box
@@ -40,7 +70,7 @@ const Home: React.FC = () => {
           Selamat Datang 👋
         </Text>
         <Text textStyle="lg" fontWeight="semibold"  color={"black"}>
-          Nama Anda
+          {profile?.full_name ?? profile?.username}
         </Text>
       </VStack>
       <Box w="full" mb={8}>
@@ -48,8 +78,9 @@ const Home: React.FC = () => {
           title="Total Saldo"
           bg={theme.primary}
           color="white"
+          total={total}
         >
-          <HomeBalanceCard bg={theme.secondary} color="white" />
+          <HomeBalanceCard bg={theme.secondary} color="white" income={totalIncome} expense={totalExpense} />
         </BalanceCard>
       </Box>
 
@@ -60,7 +91,7 @@ const Home: React.FC = () => {
         <MenuCard title="Laporan" icon={VscGraph} bg="orange.200" color="orange.800" onClick={() => navigate('/laporan')} />
       </SimpleGrid>
 
-      <CardList title="Transaksi Hari Ini" color={theme.text}/>
+      <CardList title="Transaksi Hari Ini" color={theme.text} data={todayTransactions}/>
     </Box>
   )
 }

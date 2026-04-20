@@ -1,9 +1,9 @@
 import { supabase } from "@/config/supabase";
 import type { Profile } from "@/types/Profile";
 
-type _profile = Omit<Profile, "id" | "updated_at">;
+type _profile = Partial<Omit<Profile, "id" | "updated_at">>;
 
-const getProfile = async () => {
+export const getProfile = async () => {
   const { data: userData } = await supabase.auth.getUser();
   const user = userData.user;
 
@@ -24,11 +24,16 @@ const getProfile = async () => {
   return profile;
 };
 
-const updateProfile = async (input: _profile) => {
+export const updateProfile = async (input: _profile) => {
+  const { data: userData } = await supabase.auth.getUser();
+  const user = userData.user;
+
+  if (!user) throw new Error("User not logged in");
+
   const { data, error } = await supabase
     .from("profiles")
-    .insert([input])
-    .select();
+    .update(input)
+    .eq("id", user.id)
 
   if (error) {
     throw new Error(error.message);

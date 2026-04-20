@@ -49,6 +49,7 @@ export const AuthForm = ({ type = "login", onSubmit }: AuthFormProps) => {
         const res = await register(form.email, form.password);
         if (!res.session) {
           alert("Cek email untuk verifikasi");
+          navigate("/masuk");
           return;
         }
       } catch (err: any) {
@@ -126,7 +127,7 @@ export const AuthForm = ({ type = "login", onSubmit }: AuthFormProps) => {
         )}
 
         <Button
-          bg="blue.600"
+          bg="pink.500"
           color="white"
           _hover={{ opacity: 0.9 }}
           onClick={handleSubmit}
@@ -146,7 +147,7 @@ export const AuthForm = ({ type = "login", onSubmit }: AuthFormProps) => {
             <Text
                 as="span"
                 cursor="pointer"
-                color="blue.600"
+                color="pink.500"
                 onClick={() => navigate("/masuk")}
             >
                 Masuk
@@ -158,7 +159,7 @@ export const AuthForm = ({ type = "login", onSubmit }: AuthFormProps) => {
             <Text
                 as="span"
                 cursor="pointer"
-                color="blue.600"
+                color="pink.500"
                 onClick={() => navigate("/daftar")}
             >
                 Daftar

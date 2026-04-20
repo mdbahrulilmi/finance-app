@@ -2,16 +2,39 @@ import { Box, Button, Input, Field, HStack, Icon, Heading } from "@chakra-ui/rea
 import { useState } from "react";
 import { useThemeColor } from "../../../components/ui/theme-context";
 import { BiArrowBack } from "react-icons/bi";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { addCategory, updateCategory } from "@/services/category";
 
 export const CategoryForm = () => {
+const { type } = useParams();
   const { theme } = useThemeColor();
   const navigate = useNavigate();
-  const [name, setName] = useState("");
+  
+  const location = useLocation();
+  const state = location.state;
+  
+  const isUpdate = state?.mode === "update";
+  const initialData = state?.data;
+  
+  const [name, setName] = useState(initialData?.name ?? "");
+  
+  const isIncome = type === "income";
 
-  const handleSubmit = () => {
-    setName("");
+  const handleSubmit = async () => {
+
+    if(isUpdate){
+       await updateCategory(initialData.id, {
+        name: name,
+        });
+    }else{
+        await addCategory({
+            name: name,
+            type: type as any
+        });
+    }
+    navigate(-1)
   };
+
 
   return (
     <Box  
@@ -29,14 +52,14 @@ export const CategoryForm = () => {
         <HStack display={"flex"} w={"full"} align={"center"} mb={1}>
             <Icon as={BiArrowBack} size={"md"} onClick={()=> navigate(-1)} cursor={"pointer"} color={"black"}/>
             <Heading fontSize="lg" fontWeight="bold" color={"black"}  ml={2}>
-                Tambah Kategori
+                {isUpdate? 'Edit' : 'Tambah'} Kategori {isIncome? 'Pemasukan' : 'Pengeluaran'}
             </Heading>
         </HStack>
 
         <Field.Root mt={10}>
             <Field.Label>Nama Kategori</Field.Label>
             <Input
-            placeholder="Contoh: Makan, Gaji"
+            placeholder={isIncome?"Contoh: Gaji, Freelance": "Contoh: Makan, Kontrakan"}
             value={name}
             onChange={(e) => setName(e.target.value)}
             />

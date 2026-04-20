@@ -3,6 +3,8 @@ import { BalanceCard } from "../../components/card/BalanceCard";
 import { CardList } from "../../components/list/CardList";
 import { useThemeColor } from "../../components/ui/theme-context";
 import { useNavigate } from "react-router-dom";
+import { RupiahFormater } from "@/components/utils/RupiahFormater";
+import { useTransaction } from "@/services/useTransaction";
 
 type PageType = "income" | "expense";
 
@@ -13,8 +15,34 @@ type TransactionPageProps = {
 export const TransactionPage: React.FC<TransactionPageProps> = ({ type }) => {
   const { theme } = useThemeColor();
   const navigate = useNavigate();
-
+  
   const isIncome = type === "income";
+ 
+  const { data: transactions = [] } = useTransaction();
+
+  const incomeTransactions = transactions.filter(
+    (item) => item.type === "income"
+  );
+
+  const expenseTransactions = transactions.filter(
+    (item) => item.type === "expense"
+  );
+
+  const currentTransactions = type === "income"
+  ? incomeTransactions
+  : expenseTransactions;
+
+  const total = currentTransactions.reduce(
+    (acc, item) => acc + item.amount,
+    0
+  );
+
+  const totalToday = currentTransactions
+    .filter((item) => {
+      const today = new Date().toDateString();
+      return new Date(item.transaction_date).toDateString() === today;
+    })
+    .reduce((acc, item) => acc + item.amount, 0);
 
   return (
     <Box
@@ -43,7 +71,7 @@ export const TransactionPage: React.FC<TransactionPageProps> = ({ type }) => {
           borderColor="gray.200"
         >
           <Text fontSize="xs" color="gray.500">
-            Apr 2026 ▾
+            Apr 2026
           </Text>
         </Box>
       </HStack>
@@ -54,21 +82,23 @@ export const TransactionPage: React.FC<TransactionPageProps> = ({ type }) => {
           title="Bulan ini"
           bg={theme.primary}
           color="white"
+          total={total}
         >
           <HStack mt={4} gap={4}>
             <VStack align="start" gap={0}>
               <Text fontSize="10px" opacity={0.7}>Hari Ini</Text>
-              <Text fontSize="xs" fontWeight="semibold">Rp 0</Text>
+              <Text fontSize="xs" fontWeight="semibold">
+                {RupiahFormater(totalToday)}
+              </Text>
             </VStack>
+
             <Box w="1px" h="24px" bg="whiteAlpha.400" />
-            <VStack align="start" gap={0}>
-              <Text fontSize="10px" opacity={0.7}>Bulan lalu</Text>
-              <Text fontSize="xs" fontWeight="semibold">Rp 4.800.000</Text>
-            </VStack>
-            <Box w="1px" h="24px" bg="whiteAlpha.400" />
+
             <VStack align="start" gap={0}>
               <Text fontSize="10px" opacity={0.7}>Transaksi</Text>
-              <Text fontSize="xs" fontWeight="semibold">3 entri</Text>
+              <Text fontSize="xs" fontWeight="semibold">
+                {currentTransactions.length} entri
+              </Text>
             </VStack>
           </HStack>
         </BalanceCard>
@@ -95,6 +125,7 @@ export const TransactionPage: React.FC<TransactionPageProps> = ({ type }) => {
           isIncome ? "Riwayat Pemasukan" : "Riwayat Pengeluaran"
         }
         color={theme.text}
+        data={currentTransactions}
       />
     </Box>
   );

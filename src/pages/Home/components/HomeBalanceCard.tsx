@@ -4,15 +4,14 @@ import { RupiahFormater } from "../../../components/utils/RupiahFormater";
 interface HomeBalanceCardProps {
   bg: string
   color: string
+  income: number
+  expense: number
 }
 
-export const HomeBalanceCard: React.FC<HomeBalanceCardProps> = ({ bg, color }) => {
-  const pemasukan = 6000000;
-  const pengeluaran = 1000000;
+export const HomeBalanceCard: React.FC<HomeBalanceCardProps> = ({ bg, color, income, expense }) => {
 
   return (
     <HStack w="full" px={0} gap={3} mb={4}>
-      {/* Pemasukan */}
       <Box
         flex="1"
         bg={bg}
@@ -30,7 +29,7 @@ export const HomeBalanceCard: React.FC<HomeBalanceCardProps> = ({ bg, color }) =
           </Text>
         </HStack>
         <Text fontSize="sm" fontWeight="bold" color={color} letterSpacing="tight">
-          {RupiahFormater(pemasukan)}
+          {RupiahFormater(income)}
         </Text>
       </Box>
 
@@ -52,7 +51,7 @@ export const HomeBalanceCard: React.FC<HomeBalanceCardProps> = ({ bg, color }) =
           </Text>
         </HStack>
         <Text fontSize="sm" fontWeight="bold" color={color} letterSpacing="tight">
-          {RupiahFormater(pengeluaran)}
+          {RupiahFormater(expense)}
         </Text>
       </Box>
     </HStack>

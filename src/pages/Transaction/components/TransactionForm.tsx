@@ -13,38 +13,45 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { Select } from "@chakra-ui/react";
-import { getToday } from "../../../components/utils/get-today";
 import { BiArrowBack } from "react-icons/bi";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import type { Transaction } from "@/types/Transaction";
+import { addTransaction, updateTransaction } from "@/services/transaction";
+import { useCategory } from "@/services/useCategory";
 
-type TransactionFormData = {
-  date: string;
-  amount: string;
-  source: string;
-  category: string;
-  notes: string;
+type Props = {
+  type: "income" | "expense";
 };
 
+const TransactionForm: React.FC<Props> = ({ type }) => {
 
-type FormType = "income" | "expense";
+  const location = useLocation();
+  const state = location.state;
 
-type TransactionFormProps = {
-  type: FormType;
-};
+  const isUpdate = state?.mode === "update";
+  const initialData = state?.data;
 
-const TransactionForm: React.FC<TransactionFormProps> = ({ type }) => {
-
-    const navigate = useNavigate();
+  const navigate = useNavigate();
     
-  const [formData, setFormData] = useState<TransactionFormData>({
-    date: getToday(),
-    amount: "",
-    source: "",
-    category: "",
-    notes: "",
+  const [formData, setFormData] = useState<Partial<Transaction>>({
+    amount: initialData?.amount ?? 0,
+    note: initialData?.note ?? "",
+    category_id: initialData?.category_id ?? "",
+    transaction_date: initialData?.transaction_date ?? "",
   });
 
   const isIncome = type === "income";
+
+  const { data: categories = []} = useCategory(type);
+
+  const safeCategories = categories ?? [];
+
+  const categoryCollection = createListCollection({
+    items: safeCategories.map((c) => ({
+      label: c.name,
+      value: c.id,
+    })),
+  });
 
   const handleChange = (
       e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -52,12 +59,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type }) => {
       const { name, value } = e.target;
 
       if (name === "amount") {
-        // hanya angka (hapus semua huruf)
         const onlyNumbers = value.replace(/[^0-9]/g, "");
 
         setFormData({
           ...formData,
-          amount: onlyNumbers,
+          amount: Number(onlyNumbers)
+
         });
 
         return;
@@ -67,41 +74,49 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type }) => {
         ...formData,
         [name]: value,
       });
+
     };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (
+      !formData.transaction_date ||
+      !formData.amount ||
+      !formData.category_id ||
+      !formData.note
+    ) {
+      alert("Semua field wajib diisi!");
+      return;
+    }
+
     const payload = {
-      ...formData,
       amount: Number(formData.amount),
-      type,
+      note: formData.note || "",
+      type: type,
+      transaction_date: formData.transaction_date!,
+      category_id: formData.category_id!,
     };
 
-  };
+    if (isUpdate) {
+      await updateTransaction(initialData.id, payload);
+    } else {
+      await addTransaction(payload);
+    }
 
-  const categoryCollection = createListCollection({
-    items: isIncome
-      ? [
-          { label: "Gaji", value: "gaji" },
-          { label: "Bisnis", value: "bisnis" },
-          { label: "Investasi", value: "investasi" },
-          { label: "Lainnya", value: "lainnya" },
-        ]
-      : [
-          { label: "Makanan", value: "makanan" },
-          { label: "Transport", value: "transport" },
-          { label: "Belanja", value: "belanja" },
-          { label: "Tagihan", value: "tagihan" },
-        ],
-  });
+    navigate(-1);
+  };
 
   return (
     <Box maxW="420px" mx="auto" p="6" h={"100vh"} rounded="xl" >
         <HStack display={"flex"} w={"full"} align={"center"} mb={6}>
         <Icon as={BiArrowBack} size={"md"} onClick={()=> navigate(-1)} cursor={"pointer"}/>
         <Heading size="md" ml={2}>
-            {isIncome ? "Tambah Pendapatan" : "Tambah Pengeluaran"}
+            {isUpdate
+              ? "Edit Transaksi"
+              : isIncome
+              ? "Tambah Pendapatan"
+              : "Tambah Pengeluaran"}
         </Heading>
         </HStack>
 
@@ -112,8 +127,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type }) => {
             <Field.Label>Tanggal</Field.Label>
             <Input
               type="date"
-              name="date"
-              value={formData.date}
+              name="transaction_date"
+              value={formData.transaction_date}
               onChange={handleChange}
             />
           </Field.Root>
@@ -131,27 +146,13 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type }) => {
           </Field.Root>
 
           <Field.Root required>
-            <Field.Label>
-              {isIncome ? "Sumber" : "Keterangan"}
-            </Field.Label>
-            <Input
-              name="source"
-              placeholder={
-                isIncome ? "Gaji / Freelance" : "Contoh: Makan siang"
-              }
-              value={formData.source}
-              onChange={handleChange}
-            />
-          </Field.Root>
-
-          <Field.Root required>
             <Field.Label>Kategori</Field.Label>
 
             <Select.Root
                 collection={categoryCollection}
-                value={formData.category ? [formData.category] : []}
+                value={formData.category_id ? [formData.category_id] : []}
                 onValueChange={(e) =>
-                    setFormData({ ...formData, category: e.value[0] })
+                  setFormData({ ...formData, category_id: e.value[0] })
                 }
                 >
                 <Select.Trigger bg="white">
@@ -177,10 +178,11 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ type }) => {
           <Field.Root>
             <Field.Label>Catatan</Field.Label>
             <Textarea
-              name="notes"
-              value={formData.notes}
+              name="note"
+              value={formData.note}
               onChange={handleChange}
-              placeholder="Opsional"
+              placeholder="Buat apa?"
+              required
             />
           </Field.Root>
 

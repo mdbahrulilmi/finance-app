@@ -1,21 +1,16 @@
 import { Box, Button, Heading, HStack, Icon, Text, VStack } from "@chakra-ui/react";
 import { useThemeColor } from "../../../components/ui/theme-context";
 import { BiArrowBack } from "react-icons/bi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useCategory } from "@/services/useCategory";
 
-const data = [
-  { label: "Gaji Bulanan" },
-  { label: "Bonus" },
-  { label: "Cashback" },
-];
-
-export const CategoryList = ({
-  title,
-}: {
-  title: string;
-}) => {
+export const CategoryList = () => {
+  const { type } = useParams();
+  console.log(type);
   const { theme } = useThemeColor();
   const navigate = useNavigate();
+  const { data: categories = [] } = useCategory(type as any);
+  const isIncome = type === "income";
 
   return (
     <Box 
@@ -35,14 +30,14 @@ export const CategoryList = ({
         <HStack display={"flex"} w={"full"} align={"center"} mb={1}>
             <Icon as={BiArrowBack} size={"md"} onClick={()=> navigate(-1)} cursor={"pointer"} color={"black"}/>
             <Heading fontSize="lg" fontWeight="bold" color={"black"}  ml={2}>
-                {title}
+                Kategori {isIncome ? 'Pemasukan' : 'Pengeluaran'}
             </Heading>
         </HStack>
         
 
         {/* List */}
         <VStack w="full" gap={3}>
-          {data.map((item, index) => (
+          {categories.map((item, index) => (
             <HStack
               key={index}
               w="full"
@@ -57,6 +52,14 @@ export const CategoryList = ({
                 transform: "translateY(-1px)",
                 transition: "0.2s",
               }}
+              cursor={"pointer"}
+              onClick={() =>
+              navigate(`/kategori/${type}/form`, {
+              state: {
+                mode: "update",
+                data: item,
+              },
+            })}
             >
               <HStack gap={3}>
                 <Box
@@ -74,16 +77,14 @@ export const CategoryList = ({
                   {index + 1}
                 </Box>
 
-                {/* Label */}
                 <Text fontSize="sm" fontWeight="medium" color="gray.700">
-                  {item.label}
+                  {item.name}
                 </Text>
               </HStack>
             </HStack>
           ))}
         </VStack>
 
-        {/* Button Tambah */}
         <Button
             type="submit"
             position="fixed"
@@ -95,7 +96,11 @@ export const CategoryList = ({
             p={4}
             bg={theme.primary}
             color="white"
-            onClick={()=> navigate('/kategori/pemasukan/create')}
+            onClick={() => navigate(`/kategori/${type}/form`, {
+              state: {
+                mode: "create",
+              },
+            })}
             >
             Tambah Kategori
             </Button>

@@ -1,3 +1,4 @@
+import { useProfile } from "@/services/useProfile";
 import { createContext, useContext, useEffect, useState } from "react";
 
 type ThemeColor = "pink" | "green" | "blue" | "black";
@@ -38,12 +39,26 @@ const themeMap = {
 };
 
 export const ThemeProviderCustom = ({ children }: any) => {
-  const [color, setColor] = useState<ThemeColor>("pink");
+  const getInitialTheme = (): ThemeColor => {
+    if (typeof window === "undefined") return "pink";
+    return (localStorage.getItem("theme-color") as ThemeColor) || "pink";
+  };
+
+  const [color, setColor] = useState<ThemeColor>(getInitialTheme);
+
+  const { data: profile } = useProfile();
 
   useEffect(() => {
-    const saved = localStorage.getItem("theme-color") as ThemeColor;
-    if (saved) setColor(saved);
-  }, []);
+    if (profile?.theme) {
+      setColor(profile.theme as ThemeColor);
+    }
+  }, [profile]);
+
+  useEffect(() => {
+  if (profile?.theme) {
+    setColor(profile.theme as ThemeColor);
+  }
+}, [profile]);
 
   useEffect(() => {
     localStorage.setItem("theme-color", color);

@@ -5,12 +5,11 @@ interface BalanceCardProps {
   title: string
   bg: string
   color: string
+  total: number
   children?: React.ReactNode;
 }
 
-export const BalanceCard: React.FC<BalanceCardProps> = ({ title, bg, color, children }) => {
-  const saldo = 5000000;
-
+export const BalanceCard: React.FC<BalanceCardProps> = ({ title, bg, color, total, children }) => {
   return (
     <Box
       width="full"
@@ -44,8 +43,9 @@ export const BalanceCard: React.FC<BalanceCardProps> = ({ title, bg, color, chil
       <Text fontSize="sm" opacity={0.8} mb={1} fontWeight="medium">
         {title}
       </Text>
+
       <Text fontSize="3xl" fontWeight="bold" letterSpacing="tight" mb={4}>
-        {RupiahFormater(saldo)}
+        {RupiahFormater(total)}
       </Text>
 
       {children}
