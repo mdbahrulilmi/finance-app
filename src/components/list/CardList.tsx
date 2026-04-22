@@ -29,8 +29,8 @@ export const CardList: React.FC<CardListProps> = ({ title, color, data }) => {
             {title}
           </Text>
 
-          <Text fontSize="10px" color="gray.500">
-            Lihat Lainnya
+          <Text fontSize="12px" fontWeight={"semibold"} color="gray.500">
+            {formatTanggal(new Date().toString())}
           </Text>
         </HStack>
 
@@ -61,14 +61,9 @@ export const CardList: React.FC<CardListProps> = ({ title, color, data }) => {
             
             >
               <HStack justifyContent="space-between">
-                <VStack align="start" gap={0}>
                   <Text fontSize="xs" color="gray.500">
                     {item.note}
                   </Text>
-                  <Text fontSize="10px" color="gray.400">
-                    {formatTanggal(item.transaction_date)}
-                  </Text>
-                </VStack>
 
                 <Text fontSize="xs" fontWeight="semibold" color="gray.600">
                   {RupiahFormater(item.amount)}
