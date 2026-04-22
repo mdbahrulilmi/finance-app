@@ -4,6 +4,8 @@ import { useThemeColor } from "../../../components/ui/theme-context";
 import { BiArrowBack } from "react-icons/bi";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { addCategory, updateCategory } from "@/services/category";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const CategoryForm = () => {
 const { type } = useParams();
@@ -27,10 +29,16 @@ const { type } = useParams();
         name: name,
         });
     }else{
-        await addCategory({
-            name: name,
-            type: type as any
-        });
+        try{
+            await addCategory({
+                name: name,
+                type: type as any
+            });            
+        }
+        catch (err: any) {
+            toast.warning("Akun anda sudah mencapai batas untuk menambahkan kategori. Silahkan chat ilmi ^_^");
+        }
+       
     }
     navigate(-1)
   };

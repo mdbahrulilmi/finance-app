@@ -1,4 +1,4 @@
-import { Box, VStack, SimpleGrid, Text } from "@chakra-ui/react"
+import { Box, VStack, SimpleGrid, Text, HStack } from "@chakra-ui/react"
 import { FaArrowDownLong, FaArrowUpLong } from "react-icons/fa6";
 import { VscGraph } from "react-icons/vsc"
 import { BalanceCard } from "../../components/card/BalanceCard";
@@ -10,11 +10,14 @@ import { useThemeColor } from "../../components/ui/theme-context";
 import { useNavigate } from "react-router-dom";
 import { useProfile } from "@/services/useProfile";
 import { useTransaction } from "@/services/useTransaction";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { FiBell } from "react-icons/fi";
 
 const Home: React.FC = () => {
 
-  const handleMenuClick = (menu: string) => {
-    alert(`Klik menu: ${menu}`)
+  const handleMenuClick = () => {
+    toast.info("ilmi sedang sibuk jadi fitur ini belum sempat untuk dikembangkan :)");
   }
 
   const { theme } = useThemeColor();
@@ -65,14 +68,35 @@ const Home: React.FC = () => {
         scrollbarWidth: "none"
       }}
     >
-      <VStack w="full" align="start" p={1} gap={0} mb={2}>
-        <Text textStyle="sm" color={"black"}>
-          Selamat Datang 👋
-        </Text>
-        <Text textStyle="lg" fontWeight="semibold"  color={"black"}>
-          {profile?.full_name ?? profile?.username}
-        </Text>
-      </VStack>
+      <HStack w="full" justifyContent="space-between" alignItems="center">
+        <VStack align="start" p={1} gap={0} mb={2}>
+          <Text textStyle="sm" color={"black"}>
+            Selamat Datang 👋
+          </Text>
+          <Text textStyle="lg" fontWeight="semibold" color={"black"}>
+            {profile?.full_name ?? profile?.username}
+          </Text>
+        </VStack>
+
+        <Box
+          position="relative"
+          cursor="pointer"
+          onClick={()=> handleMenuClick()}
+        >
+          <FiBell size={24}/>
+          
+          <Box
+            position="absolute"
+            top="0"
+            right="0.5"
+            w="8px"
+            h="8px"
+            bg="red.500"
+            borderRadius="full"
+          />
+        </Box>
+      </HStack>
+      
       <Box w="full" mb={8}>
         <BalanceCard
           title="Total Saldo"
@@ -87,7 +111,7 @@ const Home: React.FC = () => {
       <SimpleGrid columns={4} gap={4} mb={8}>
         <MenuCard title="Pemasukan" icon={FaArrowUpLong} bg="green.200" color="green.800" onClick={() => navigate('/pemasukan/form')} />
         <MenuCard title="Pengeluaran" icon={FaArrowDownLong} bg="red.200" color="red.800" onClick={() => navigate('/pengeluaran/form')} />
-        <MenuCard title="Wishlist" icon={MdOutlineEdit} bg="blue.200" color="blue.800" onClick={() => handleMenuClick("Wishlist")} />
+        <MenuCard title="Wishlist" icon={MdOutlineEdit} bg="blue.200" color="blue.800" onClick={() => handleMenuClick()} />
         <MenuCard title="Laporan" icon={VscGraph} bg="orange.200" color="orange.800" onClick={() => navigate('/laporan')} />
       </SimpleGrid>
 

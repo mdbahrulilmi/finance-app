@@ -4,6 +4,13 @@ import {
   VStack,
   HStack,
   Button,
+  DialogRoot,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogBody,
+  DialogCloseTrigger,
 } from "@chakra-ui/react";
 import { GiPayMoney, GiReceiveMoney } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
@@ -12,10 +19,14 @@ import { ThemeColors } from "./components/ThemeColors";
 import { useThemeColor } from "@/components/ui/theme-context";
 import { ProfileCard } from "./components/ProfileCard";
 import { SettingMenuItem } from "./components/SettingMenuItem";
+import { EditProfileContent } from "./components/EditProfileContent";
+import { useState } from "react";
+
 
 export const Settings = () => {
   const { theme } = useThemeColor();
   const navigate = useNavigate();
+  const [openEditProfile, setOpenEditProfile] = useState(false);
 
   return (
     <Box h="100vh"
@@ -38,7 +49,25 @@ export const Settings = () => {
       </HStack>
       <VStack w="full" gap={4} align="start">
 
-        <ProfileCard />
+        <DialogRoot open={openEditProfile} onOpenChange={(e) => setOpenEditProfile(e.open)}>
+          <DialogTrigger asChild>
+            <Box w="full" onClick={() => setOpenEditProfile(true)}>
+              <ProfileCard />
+            </Box>
+          </DialogTrigger>
+
+          <DialogContent borderTopRadius="20px" mt="auto" mb={0}>
+            <DialogHeader>
+              <DialogTitle>Edit Profile</DialogTitle>
+            </DialogHeader>
+
+            <DialogBody>
+              <EditProfileContent onClose={() => setOpenEditProfile(false)}/>
+            </DialogBody>
+
+            <DialogCloseTrigger />
+          </DialogContent>
+        </DialogRoot>
 
         <Box 
         w="full" 
@@ -56,7 +85,9 @@ export const Settings = () => {
 
         <Button
           w="full"
-          // leftIcon={<FiLogOut />}
+          mt={5}
+          h="52px"
+          borderRadius="14px"
           onClick={async () => {
             await logout();
             navigate("/masuk");

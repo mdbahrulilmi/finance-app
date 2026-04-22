@@ -41,7 +41,7 @@ export const CardListGrouped: React.FC<CardListProps> = ({ title, color, data })
           </Text>
 
           <Text fontSize="10px" color="gray.500">
-            Lihat Semua
+            
           </Text>
         </HStack>
 
@@ -63,7 +63,6 @@ export const CardListGrouped: React.FC<CardListProps> = ({ title, color, data })
                 </Text>
 
                 <Box
-                  mt={0.5}
                   flex="1"
                   borderBottom="2px dashed"
                   borderColor="gray.300"

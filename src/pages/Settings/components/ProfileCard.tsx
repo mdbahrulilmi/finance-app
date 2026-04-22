@@ -17,7 +17,9 @@ export const ProfileCard = () => {
     });
 
     const user = {
-        name: profile?.full_name ?? profile?.username ,
+        avatar: profile?.avatar_url,
+        name: profile?.full_name,
+        username: profile?.username,
         email: profile?.email,
         joinDate: profile?.created_at,
     };
@@ -31,17 +33,23 @@ export const ProfileCard = () => {
             borderColor={theme.primary}
             borderRadius="xl"
             boxShadow={`0 0px 6px ${shadowColor}`}
+            cursor="pointer"
         >
             <HStack gap={4}>
-            <Avatar.Root>
-                <Avatar.Image src=""/>
-                <Avatar.Fallback name={user.name ?? ''}/>
+            <Avatar.Root size="2xl">
+                <Avatar.Image src={`/public/images/${user.avatar}`}/>
+                <Avatar.Fallback name={user.name ?? user.username ?? ''}/>
             </Avatar.Root>
 
             <VStack align="start" gap={0}>
                 <Text fontSize="md" fontWeight="bold">
-                {user.name}
+                {user.name ?? user.username}
                 </Text>
+                {user.name && (
+                    <Text fontSize="xs" fontWeight="semibold">
+                        {user.username}
+                    </Text>
+                    )}
                 <Text fontSize="xs" color="gray.500">
                 {user.email}
                 </Text>

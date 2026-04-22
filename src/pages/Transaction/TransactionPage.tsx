@@ -1,4 +1,4 @@
-  import { Box, HStack, Text, Button, VStack, Spacer } from "@chakra-ui/react"
+  import { Box, HStack, Text, Button, VStack } from "@chakra-ui/react"
   import { BalanceCard } from "../../components/card/BalanceCard";
   import { CardListGrouped } from "../../components/list/CardListGrouped";
   import { useThemeColor } from "../../components/ui/theme-context";

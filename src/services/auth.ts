@@ -33,3 +33,15 @@ export const logout = async () => {
 
   if (error) throw new Error(error.message);
 };
+
+export const loginWithGoogle = async () => {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: "ilmi-finance.vercel.app"
+    },
+  });
+
+  if (error) throw error;
+  return data;
+};

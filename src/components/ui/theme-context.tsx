@@ -22,13 +22,13 @@ const themeMap = {
     text: "pink.500",
   },
   green: {
-    primary: "green.400",
-    secondary: "green.300",
-    text: "green.500",
+    primary: "green.800",
+    secondary: "green.700",
+    text: "green.700",
   },
   blue: {
-    primary: "blue.400",
-    secondary: "blue.300",
+    primary: "blue.600",
+    secondary: "blue.500",
     text: "blue.500",
   },
   black: {
