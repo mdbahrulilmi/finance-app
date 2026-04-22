@@ -11,6 +11,9 @@ import {
   DialogTitle,
   DialogBody,
   DialogCloseTrigger,
+  Portal,
+  DialogBackdrop,
+  DialogPositioner,
 } from "@chakra-ui/react";
 import { GiPayMoney, GiReceiveMoney } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
@@ -49,25 +52,39 @@ export const Settings = () => {
       </HStack>
       <VStack w="full" gap={4} align="start">
 
-        <DialogRoot open={openEditProfile} onOpenChange={(e) => setOpenEditProfile(e.open)}>
-          <DialogTrigger asChild>
-            <Box w="full" onClick={() => setOpenEditProfile(true)}>
-              <ProfileCard />
-            </Box>
-          </DialogTrigger>
+        <DialogRoot
+  open={openEditProfile}
+  onOpenChange={(e) => setOpenEditProfile(e.open)}
+>
+  <DialogTrigger asChild>
+    <Box w="full">
+      <ProfileCard />
+    </Box>
+  </DialogTrigger>
 
-          <DialogContent borderTopRadius="20px" mt="auto" mb={0}>
-            <DialogHeader>
-              <DialogTitle>Edit Profile</DialogTitle>
-            </DialogHeader>
+  <Portal>
+    <DialogBackdrop />
 
-            <DialogBody>
-              <EditProfileContent onClose={() => setOpenEditProfile(false)}/>
-            </DialogBody>
+    <DialogPositioner>
+      <DialogContent
+          maxW="350px"
+          mx="auto"
+          w="full"
+          borderRadius="20px"
+        >
+        <DialogHeader>
+          <DialogTitle>Edit Profile</DialogTitle>
+        </DialogHeader>
 
-            <DialogCloseTrigger />
-          </DialogContent>
-        </DialogRoot>
+        <DialogBody>
+          <EditProfileContent onClose={() => setOpenEditProfile(false)} />
+        </DialogBody>
+
+        <DialogCloseTrigger />
+      </DialogContent>
+    </DialogPositioner>
+  </Portal>
+</DialogRoot>
 
         <Box 
         w="full" 

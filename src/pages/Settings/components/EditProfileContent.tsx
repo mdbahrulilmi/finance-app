@@ -79,6 +79,7 @@ export const EditProfileContent = ({ onClose }: { onClose: () => void }) => {
           {avatars.map((avatar) => (
             <Box
               key={avatar}
+              boxSize="60px"
               borderRadius="full"
               overflow="hidden"
               border={
@@ -91,7 +92,9 @@ export const EditProfileContent = ({ onClose }: { onClose: () => void }) => {
             >
               <Image
                 src={`/images/${avatar}`}
-                boxSize="60px"
+                w="full"
+                h="full"
+                objectFit="cover"
               />
             </Box>
           ))}
