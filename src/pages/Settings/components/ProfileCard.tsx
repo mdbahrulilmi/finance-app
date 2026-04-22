@@ -37,7 +37,7 @@ export const ProfileCard = () => {
         >
             <HStack gap={4}>
             <Avatar.Root size="2xl">
-                <Avatar.Image src={`/public/images/${user.avatar}`}/>
+                <Avatar.Image src={`/images/${user.avatar}`}/>
                 <Avatar.Fallback name={user.name ?? user.username ?? ''}/>
             </Avatar.Root>
 

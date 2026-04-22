@@ -5,6 +5,8 @@
   import { useNavigate } from "react-router-dom";
   import { RupiahFormater } from "@/components/utils/RupiahFormater";
   import { useTransaction } from "@/services/useTransaction";
+  import { useCategory } from "@/services/useCategory";
+  import { toast } from "react-toastify";
 
   type PageType = "income" | "expense";
 
@@ -15,6 +17,12 @@
   export const TransactionPage: React.FC<TransactionPageProps> = ({ type }) => {
     const { theme } = useThemeColor();
     const navigate = useNavigate();
+
+    const handleNoCategory = () => {
+        toast.warning("Belum ada kategori silahkan tambahkan dipengaturan!");
+    }
+
+    const { data: categories = [] } = useCategory(type);
     
     const isIncome = type === "income";
   
@@ -135,7 +143,6 @@
           </BalanceCard>
         </Box>
 
-        {/* Button */}
         <Button
           w="full"
           mb={4}
@@ -143,9 +150,14 @@
           bg={isIncome ? "green.500" : "red.500"}
           color="white"
           h="48px"
-          onClick={() =>
-            navigate(isIncome ? "/pemasukan/form" : "/pengeluaran/form")
-          }
+          onClick={() => {
+            if (!categories.length) {
+              handleNoCategory();
+              return;
+            }
+
+            navigate(isIncome ? "/pemasukan/form" : "/pengeluaran/form");
+          }}
         >
           {isIncome ? "+ Tambah Pemasukan" : "+ Tambah Pengeluaran"}
         </Button>

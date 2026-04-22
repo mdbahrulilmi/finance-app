@@ -90,7 +90,7 @@ export const EditProfileContent = ({ onClose }: { onClose: () => void }) => {
               cursor="pointer"
             >
               <Image
-                src={`/public/images/${avatar}`}
+                src={`/images/${avatar}`}
                 boxSize="60px"
               />
             </Box>

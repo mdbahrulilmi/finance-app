@@ -13,6 +13,7 @@ import { useTransaction } from "@/services/useTransaction";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FiBell } from "react-icons/fi";
+import { useCategory } from "@/services/useCategory";
 
 const Home: React.FC = () => {
 
@@ -20,9 +21,16 @@ const Home: React.FC = () => {
     toast.info("ilmi sedang sibuk jadi fitur ini belum sempat untuk dikembangkan :)");
   }
 
+  const handleNoCategory = () => {
+    toast.warning("Belum ada kategori silahkan tambahkan dipengaturan!");
+  }
+
   const { theme } = useThemeColor();
   const navigate = useNavigate();
   const { data: profile } = useProfile();
+
+  const { data: incomeCategories } = useCategory("income");
+  const { data: expenseCategories } = useCategory("expense");
 
   const {data:transactions = []} = useTransaction();
 
@@ -109,8 +117,20 @@ const Home: React.FC = () => {
       </Box>
 
       <SimpleGrid columns={4} gap={4} mb={8}>
-        <MenuCard title="Pemasukan" icon={FaArrowUpLong} bg="green.200" color="green.800" onClick={() => navigate('/pemasukan/form')} />
-        <MenuCard title="Pengeluaran" icon={FaArrowDownLong} bg="red.200" color="red.800" onClick={() => navigate('/pengeluaran/form')} />
+        <MenuCard title="Pemasukan" icon={FaArrowUpLong} bg="green.200" color="green.800"  onClick={() => {
+          if (!incomeCategories || incomeCategories.length === 0) {
+            handleNoCategory();
+            return;
+          }
+          navigate("/pemasukan/form");
+        }} />
+        <MenuCard title="Pengeluaran" icon={FaArrowDownLong} bg="red.200" color="red.800" onClick={() => {
+          if (!expenseCategories || expenseCategories.length === 0) {
+            handleNoCategory();
+            return;
+          }
+          navigate("/pengeluaran/form");
+        }} />
         <MenuCard title="Wishlist" icon={MdOutlineEdit} bg="blue.200" color="blue.800" onClick={() => handleMenuClick()} />
         <MenuCard title="Laporan" icon={VscGraph} bg="orange.200" color="orange.800" onClick={() => navigate('/laporan')} />
       </SimpleGrid>

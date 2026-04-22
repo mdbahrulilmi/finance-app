@@ -24,25 +24,29 @@ type Props = {
 };
 
 const TransactionForm: React.FC<Props> = ({ type }) => {
+  const navigate = useNavigate();
+  const { data: categories = []} = useCategory(type);
+  if(!categories.length){
+    navigate(-1)
+    return;
+  }
 
   const location = useLocation();
   const state = location.state;
 
   const isUpdate = state?.mode === "update";
   const initialData = state?.data;
-
-  const navigate = useNavigate();
     
+  const today = new Date().toLocaleDateString("sv-SE");
+
   const [formData, setFormData] = useState<Partial<Transaction>>({
     amount: initialData?.amount ?? 0,
     note: initialData?.note ?? "",
     category_id: initialData?.category_id ?? "",
-    transaction_date: initialData?.transaction_date ?? "",
+    transaction_date: initialData?.transaction_date ?? today,
   });
 
   const isIncome = type === "income";
-
-  const { data: categories = []} = useCategory(type);
 
   const safeCategories = categories ?? [];
 
