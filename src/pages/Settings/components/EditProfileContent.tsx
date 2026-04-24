@@ -1,3 +1,4 @@
+import { useThemeColor } from "@/components/ui/theme-context";
 import { updateProfile } from "@/services/profile";
 import { useProfile } from "@/services/useProfile";
 import {
@@ -14,15 +15,16 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const avatars = [
-  "image1.jpg",
-  "image2.jpg",
-  "image3.jpg",
-  "image4.jpg",
+  "avatar1.webp",
+  "avatar2.webp",
+  "avatar3.webp",
+  "avatar4.webp",
 ];
 
 export const EditProfileContent = ({ onClose }: { onClose: () => void }) => {
   const [name, setName] = useState("");
-  const [selectedAvatar, setSelectedAvatar] = useState("avatar1.png");
+  const [selectedAvatar, setSelectedAvatar] = useState("");
+  const {theme} = useThemeColor()
   const queryClient = useQueryClient();
 
   const { data: profile } = useProfile();
@@ -30,7 +32,7 @@ export const EditProfileContent = ({ onClose }: { onClose: () => void }) => {
    useEffect(() => {
         if (profile) {
           setName(profile.full_name ?? profile.username ?? "");
-          setSelectedAvatar(profile.avatar_url ?? "avatar1.png");
+          setSelectedAvatar(profile.avatar_url ?? "");
         }
       }, [profile]);
 
@@ -40,10 +42,6 @@ export const EditProfileContent = ({ onClose }: { onClose: () => void }) => {
         full_name: name.trim() || null,
         avatar_url: selectedAvatar,
       });
-
-
-     
-
       queryClient.invalidateQueries({
         queryKey: ["profile"],
       });
@@ -82,11 +80,8 @@ export const EditProfileContent = ({ onClose }: { onClose: () => void }) => {
               boxSize="60px"
               borderRadius="full"
               overflow="hidden"
-              border={
-                selectedAvatar === avatar
-                  ? "3px solid #3182ce"
-                  : "3px solid transparent"
-              }
+              borderWidth={"4px"}
+              borderColor={selectedAvatar === avatar ? theme.primary : "transparent"}
               onClick={() => setSelectedAvatar(avatar)}
               cursor="pointer"
             >
@@ -101,12 +96,11 @@ export const EditProfileContent = ({ onClose }: { onClose: () => void }) => {
         </SimpleGrid>
       </Box>
 
-      {/* Save */}
       <Button
         w="full"
         mt={2}
         borderRadius="12px"
-        bg="gray.800"
+        bg={theme.primary}
         color="white"
         onClick={handleSave}
       >

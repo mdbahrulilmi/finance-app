@@ -4,7 +4,6 @@ import { VscGraph } from "react-icons/vsc"
 import { BalanceCard } from "../../components/card/BalanceCard";
 import { MenuCard } from "./components/MenuCard";
 import { CardList } from "../../components/list/CardList";
-import { MdOutlineEdit } from "react-icons/md";
 import { HomeBalanceCard } from "./components/HomeBalanceCard";
 import { useThemeColor } from "../../components/ui/theme-context";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +13,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FiBell } from "react-icons/fi";
 import { useCategory } from "@/services/useCategory";
+import { PiPottedPlantFill } from "react-icons/pi";
 
 const Home: React.FC = () => {
 
@@ -61,7 +61,8 @@ const Home: React.FC = () => {
 
   return (
     <Box
-      h="100vh"
+      h="100dvh"
+      w="100%"
       maxW="375px"
       mx="auto"
       p={4}
@@ -131,7 +132,7 @@ const Home: React.FC = () => {
           }
           navigate("/pengeluaran/form");
         }} />
-        <MenuCard title="Wishlist" icon={MdOutlineEdit} bg="blue.200" color="blue.800" onClick={() => handleMenuClick()} />
+        <MenuCard title="Pot" icon={PiPottedPlantFill} bg="blue.200" color="blue.800" onClick={() => navigate('/pot')} />
         <MenuCard title="Laporan" icon={VscGraph} bg="orange.200" color="orange.800" onClick={() => navigate('/laporan')} />
       </SimpleGrid>
 

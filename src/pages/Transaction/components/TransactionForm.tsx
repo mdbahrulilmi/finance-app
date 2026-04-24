@@ -13,11 +13,11 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { Select } from "@chakra-ui/react";
-import { BiArrowBack } from "react-icons/bi";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { Transaction } from "@/types/Transaction";
 import { addTransaction, updateTransaction } from "@/services/transaction";
 import { useCategory } from "@/services/useCategory";
+import { LuArrowLeft } from "react-icons/lu";
 
 type Props = {
   type: "income" | "expense";
@@ -114,7 +114,7 @@ const TransactionForm: React.FC<Props> = ({ type }) => {
   return (
     <Box maxW="420px" mx="auto" p="6" h={"100vh"} rounded="xl" >
         <HStack display={"flex"} w={"full"} align={"center"} mb={6}>
-        <Icon as={BiArrowBack} size={"md"} onClick={()=> navigate(-1)} cursor={"pointer"}/>
+        <Icon as={LuArrowLeft} size={"md"} onClick={()=> navigate(-1)} cursor={"pointer"}/>
         <Heading size="md" ml={2}>
             {isUpdate
               ? "Edit Transaksi"
@@ -168,7 +168,7 @@ const TransactionForm: React.FC<Props> = ({ type }) => {
                     <Select.Content>
                         <Select.ItemGroup>
                         {categoryCollection.items.map((item) => (
-                            <Select.Item item={item} key={item.value}>
+                            <Select.Item my={1} item={item} key={item.value}>
                             {item.label}
                             </Select.Item>
                         ))}
@@ -198,7 +198,7 @@ const TransactionForm: React.FC<Props> = ({ type }) => {
             transform="translateX(-50%)"
             w="95%"
             borderRadius="2xl"
-            p={4}
+            p={6}
             boxShadow="lg"
             bg={isIncome ? "green.500" : "red.500"}
             color="white"

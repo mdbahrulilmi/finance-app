@@ -24,6 +24,7 @@ import { ProfileCard } from "./components/ProfileCard";
 import { SettingMenuItem } from "./components/SettingMenuItem";
 import { EditProfileContent } from "./components/EditProfileContent";
 import { useState } from "react";
+import { BiX } from "react-icons/bi";
 
 
 export const Settings = () => {
@@ -46,45 +47,55 @@ export const Settings = () => {
       <HStack w="full" justifyContent="space-between" alignItems="center" mb={4}>
         <VStack align="start" gap={0}>
           <Text fontSize="lg" fontWeight="bold" color={theme.text}>
-           Settings
+           Pengaturan
           </Text>
         </VStack>
       </HStack>
       <VStack w="full" gap={4} align="start">
 
         <DialogRoot
-  open={openEditProfile}
-  onOpenChange={(e) => setOpenEditProfile(e.open)}
->
-  <DialogTrigger asChild>
-    <Box w="full">
-      <ProfileCard />
-    </Box>
-  </DialogTrigger>
-
-  <Portal>
-    <DialogBackdrop />
-
-    <DialogPositioner>
-      <DialogContent
-          maxW="350px"
-          mx="auto"
-          w="full"
-          borderRadius="20px"
+          open={openEditProfile}
+          onOpenChange={(e) => setOpenEditProfile(e.open)}
         >
-        <DialogHeader>
-          <DialogTitle>Edit Profile</DialogTitle>
-        </DialogHeader>
+          <DialogTrigger asChild>
+            <Box w="full">
+              <ProfileCard />
+            </Box>
+          </DialogTrigger>
 
-        <DialogBody>
-          <EditProfileContent onClose={() => setOpenEditProfile(false)} />
-        </DialogBody>
+          <Portal>
+            <DialogBackdrop />
 
-        <DialogCloseTrigger />
-      </DialogContent>
-    </DialogPositioner>
-  </Portal>
-</DialogRoot>
+            <DialogPositioner>
+            <DialogContent
+                maxW="350px"
+                mx="auto"
+                w="full"
+                borderRadius="20px"
+              >
+              <DialogHeader alignItems={"center"}>
+                <DialogTitle>Edit Profile</DialogTitle>
+
+                <DialogCloseTrigger asChild>
+                  <Button
+                    bg="transparent"
+                    color="red.600"
+                    _hover={{ bg: "red.50" }}
+                  >
+                    <BiX/>
+                  </Button>
+                </DialogCloseTrigger>
+              </DialogHeader>
+
+              <DialogBody>
+                <EditProfileContent onClose={() => setOpenEditProfile(false)} />
+              </DialogBody>
+
+              <DialogCloseTrigger />
+            </DialogContent>
+          </DialogPositioner>
+        </Portal>
+      </DialogRoot>
 
         <Box 
         w="full" 

@@ -40,8 +40,8 @@ const themeMap = {
 
 export const ThemeProviderCustom = ({ children }: any) => {
   const getInitialTheme = (): ThemeColor => {
-    if (typeof window === "undefined") return "pink";
-    return (localStorage.getItem("theme-color") as ThemeColor) || "pink";
+    if (typeof window === "undefined") return "black";
+    return (localStorage.getItem("theme-color") as ThemeColor) || "black";
   };
 
   const [color, setColor] = useState<ThemeColor>(getInitialTheme);

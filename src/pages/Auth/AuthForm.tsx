@@ -252,34 +252,35 @@ export const AuthForm = ({ type = "login", onSubmit }: AuthFormProps) => {
   </Button>
 
   {!isRegister && (
+  <>
     <Text textAlign="center" fontSize="12px" color="gray.400" my={3}>
       atau
     </Text>
+    <Button
+      h="52px"
+      borderRadius="14px"
+      bg="white"
+      color="black"
+      border="1.5px solid"
+      borderColor="gray.100"
+      fontSize="14px"
+      fontWeight="600"
+      onClick={async () => {
+        try {
+          await loginWithGoogle();
+        } catch (err: any) {
+          toast.error(err.message || "Gagal login Google");
+        }
+      }}
+      _hover={{ bg: "gray.50", color: "black" }}
+    >
+      <HStack gap={2}>
+        <FcGoogle size={20} />
+        <span>Login dengan Google</span>
+      </HStack>
+    </Button>
+   </>
   )}
-
-  <Button
-    h="52px"
-    borderRadius="14px"
-    bg="white"
-    color="black"
-    border="1.5px solid"
-    borderColor="gray.100"
-    fontSize="14px"
-    fontWeight="600"
-    onClick={async () => {
-      try {
-        await loginWithGoogle();
-      } catch (err: any) {
-        toast.error(err.message || "Gagal login Google");
-      }
-    }}
-    _hover={{ bg: "gray.50", color: "black" }}
-  >
-    <HStack gap={2}>
-      <FcGoogle size={20} />
-      <span>Login dengan Google</span>
-    </HStack>
-  </Button>
       </VStack>
       <Box textAlign="center" zIndex={1}>
         <Text fontSize="13px" color="gray.400">
