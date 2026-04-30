@@ -20,14 +20,15 @@ const JoinPotPage = () => {
       } catch (err) {
         alert("Gagal join pot");
       } finally {
-        navigate(`/pot`);
+        navigate(`/pot`, { replace: true });
+        window.location.reload();
       }
     };
 
     doJoin();
   }, [id]);
 
-  return <div>Joining pot...</div>;
+  return <></>;
 };
 
 export default JoinPotPage;

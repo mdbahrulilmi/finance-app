@@ -5,10 +5,13 @@ import { PiPottedPlantBold } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
 import { LuArrowLeft } from "react-icons/lu";
 import { usePots } from "@/services/usePot";
+import { useState } from "react";
+import { PotInfoModal } from "./components/PotInfoModal";
 
 export const PotPage = () => {
   const { theme } = useThemeColor();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   const { data: pots, isLoading } = usePots();
 
@@ -16,7 +19,7 @@ export const PotPage = () => {
     <Box
       h="100dvh"
       w="100%"
-      maxW="375px"
+      maxW="480px"
       mx="auto"
       pb={24}
       display="flex"
@@ -41,7 +44,7 @@ export const PotPage = () => {
           <HStack gap={3} align="center">
             <Box
               cursor="pointer"
-              onClick={() => navigate(-1)}
+              onClick={() => navigate("/", { replace: true })}
               p={2}
               borderRadius="full"
               _hover={{ bg: "whiteAlpha.200" }}
@@ -61,7 +64,7 @@ export const PotPage = () => {
           </HStack>
 
           <Box p={2} bg="whiteAlpha.200" borderRadius="full">
-            <Icon as={PiPottedPlantBold} boxSize={5} color="white" />
+            <Icon as={PiPottedPlantBold} boxSize={5} color="white" cursor={"pointer"} onClick={() => setOpen(true)}/>
           </Box>
         </HStack>
       </Box>
@@ -99,6 +102,9 @@ export const PotPage = () => {
       >
         Tambah
       </Button>
+      {open && 
+        <PotInfoModal onClose={ () => setOpen(false)}/>
+      }
     </Box>
   );
 };

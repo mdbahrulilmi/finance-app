@@ -18,7 +18,7 @@ export const CategoryList = () => {
       p={4} 
       bg="gray.50" 
       h={"100vh"}
-      maxW="375px"
+      maxW="480px"
       borderRadius="xl"
       display="flex"
       flexDirection="column"

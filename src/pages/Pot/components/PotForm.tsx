@@ -33,6 +33,7 @@ const PotForm: React.FC<Props> = ({
     name: "",
     target_amount: 0,
     deadline: "",
+    image: "",
   });
 
   const navigate = useNavigate();
@@ -44,6 +45,7 @@ const PotForm: React.FC<Props> = ({
         name: initialData.name || "",
         target_amount: initialData.target_amount || 0,
         deadline: initialData.deadline || "",
+        image: initialData.image || "",
       });
     }
   }, [initialData]);

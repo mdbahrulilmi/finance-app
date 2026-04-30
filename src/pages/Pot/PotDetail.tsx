@@ -55,7 +55,7 @@ export const PotDetail = () => {
     <Box
       h="100dvh"
       w="100%"
-      maxW="375px"
+      maxW="480px"
       mx="auto"
       pb={28}
       display="flex"

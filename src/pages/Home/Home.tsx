@@ -63,7 +63,7 @@ const Home: React.FC = () => {
     <Box
       h="100dvh"
       w="100%"
-      maxW="375px"
+      maxW="480px"
       mx="auto"
       p={4}
       pb={24}

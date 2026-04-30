@@ -77,7 +77,7 @@ export const AuthForm = ({ type = "login", onSubmit }: AuthFormProps) => {
   return (
     <Box
       w="full"
-      maxW="390px"
+      maxW="480px"
       minH="100dvh"
       mx="auto"
       bg="white"

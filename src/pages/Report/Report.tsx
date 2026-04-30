@@ -118,7 +118,7 @@ const getPieData = (type: "income" | "expense") => {
   return (
     <Box
       h="100vh"
-      maxW="375px"
+      maxW="480px"
       mx="auto"
       p={4}
       pb={24}

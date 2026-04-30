@@ -30,7 +30,6 @@ export const PotSettingsModal = (
         <Box
         bg="white"
         w="100%"
-        maxW="375px"
         borderTopRadius="3xl"
         p={5}
         pb={8}

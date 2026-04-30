@@ -81,7 +81,7 @@
     return (
       <Box
         h="100vh"
-        maxW="375px"
+        maxW="480px"
         mx="auto"
         px={4}
         pt={5}

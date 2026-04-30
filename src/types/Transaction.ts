@@ -9,5 +9,10 @@ export type Transaction = {
     id: string;
     name: string;
   };
+  account_id: string;
+  account?: {
+    id: string;
+    name: string;
+  }
   created_at:string;
 };

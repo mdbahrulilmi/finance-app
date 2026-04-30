@@ -15,9 +15,10 @@ import {
 import { Select } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { Transaction } from "@/types/Transaction";
-import { addTransaction, updateTransaction } from "@/services/transaction";
+import { addTransaction, deleteTransaction, updateTransaction } from "@/services/transaction";
 import { useCategory } from "@/services/useCategory";
 import { LuArrowLeft } from "react-icons/lu";
+import { useAccount } from "@/services/useAccounts";
 
 type Props = {
   type: "income" | "expense";
@@ -26,6 +27,8 @@ type Props = {
 const TransactionForm: React.FC<Props> = ({ type }) => {
   const navigate = useNavigate();
   const { data: categories = []} = useCategory(type);
+  const { data: accounts = []} = useAccount();
+  console.log(accounts);
   if(!categories.length){
     navigate(-1)
     return;
@@ -49,6 +52,13 @@ const TransactionForm: React.FC<Props> = ({ type }) => {
   const isIncome = type === "income";
 
   const safeCategories = categories ?? [];
+
+  const accountCollection = createListCollection({
+    items: accounts.map((a) => ({
+      label: a.name,
+      value: a.id,
+    }))
+  })
 
   const categoryCollection = createListCollection({
     items: safeCategories.map((c) => ({
@@ -100,6 +110,7 @@ const TransactionForm: React.FC<Props> = ({ type }) => {
       type: type,
       transaction_date: formData.transaction_date!,
       category_id: formData.category_id!,
+      account_id: formData.account_id!,
     };
 
     if (isUpdate) {
@@ -110,6 +121,13 @@ const TransactionForm: React.FC<Props> = ({ type }) => {
 
     navigate(-1);
   };
+
+  const handleDelete = async () => {
+    if (isUpdate) {
+        await deleteTransaction(initialData.id);
+      }
+    navigate(-1);
+  }
 
   return (
     <Box maxW="420px" mx="auto" p="6" h={"100vh"} rounded="xl" >
@@ -178,6 +196,34 @@ const TransactionForm: React.FC<Props> = ({ type }) => {
                 </Portal>
                 </Select.Root>
           </Field.Root>
+          <Field.Root required>
+            <Field.Label>Akun</Field.Label>
+            <Select.Root
+                collection={accountCollection}
+                value={formData.account_id ? [formData.account_id] : []}
+                onValueChange={(e) =>
+                  setFormData({ ...formData, account_id: e.value[0] })
+                }
+                >
+                <Select.Trigger bg="white">
+                    <Select.ValueText placeholder="Pilih kategori" />
+                </Select.Trigger>
+
+                <Portal>
+                    <Select.Positioner>
+                    <Select.Content>
+                        <Select.ItemGroup>
+                        {accountCollection.items.map((item) => (
+                            <Select.Item my={1} item={item} key={item.value}>
+                            {item.label}
+                            </Select.Item>
+                        ))}
+                        </Select.ItemGroup>
+                    </Select.Content>
+                    </Select.Positioner>
+                </Portal>
+                </Select.Root>
+          </Field.Root>
 
           <Field.Root>
             <Field.Label>Catatan</Field.Label>
@@ -189,7 +235,24 @@ const TransactionForm: React.FC<Props> = ({ type }) => {
               required
             />
           </Field.Root>
-
+          {
+            isUpdate &&
+            <Button
+              position="fixed"
+              bottom={20}
+              left="50%"
+              transform="translateX(-50%)"
+              w="95%"
+              borderRadius="2xl"
+              p={6}
+              boxShadow="lg"
+              bg={"red.500"}
+              color="white"
+              onClick={handleDelete}
+            >
+              Hapus
+          </Button>
+          }
           <Button
             type="submit"
             position="fixed"
@@ -200,7 +263,7 @@ const TransactionForm: React.FC<Props> = ({ type }) => {
             borderRadius="2xl"
             p={6}
             boxShadow="lg"
-            bg={isIncome ? "green.500" : "red.500"}
+            bg={"green.500"}
             color="white"
           >
             Simpan

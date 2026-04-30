@@ -13,6 +13,10 @@ export const getTransaction = async ({type}:{type?:string}) => {
             category:category_id (
                 id,
                 name
+            ),
+            account:account_id(
+              id,
+              name
             )
             `)
         .eq("user_id", user.user?.id)
@@ -44,6 +48,7 @@ export const addTransaction = async (input: _transaction) => {
         transaction_date:input.transaction_date,
         user_id: user.user?.id,
         category_id: input.category_id,
+        account_id: input.account_id
         }
     ])
     .select();
@@ -79,4 +84,15 @@ export const updateTransaction = async (
   }
 
   return data;
+};
+
+export const deleteTransaction = async (id: string) => {
+  const { error } = await supabase
+    .from("transactions")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw error;
+
+  return { message: "Pot deleted" };
 };
